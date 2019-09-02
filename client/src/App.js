@@ -21,34 +21,23 @@ const styles = theme => ({
   }
 });
 
-const customers = [
-  {
-    id: 1,
-    image: "https://placeimg.com/64/64/1",
-    name: "김태인",
-    birthday: "910422",
-    gender: "남자",
-    job: "취업준비생"
-  },
-  {
-    id: 2,
-    image: "https://placeimg.com/64/64/2",
-    name: "어머니",
-    birthday: "670707",
-    gender: "여자",
-    job: "주부"
-  },
-  {
-    id: 3,
-    image: "https://placeimg.com/64/64/3",
-    name: "최선우",
-    birthday: "910505",
-    gender: "남자",
-    job: "취업준비생"
-  }
-];
-
 class App extends React.Component {
+  state = {
+    customers: ""
+  };
+
+  componentDidMount() {
+    this.callApi()
+      .then(res => this.setState({ customers: res }))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch("/api/customers");
+    const body = await response.json();
+    return body;
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -65,19 +54,21 @@ class App extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map(customer => {
-              return (
-                <Customer
-                  key={customer.id}
-                  id={customer.id}
-                  image={customer.image}
-                  name={customer.name}
-                  gender={customer.gender}
-                  birthday={customer.birthday}
-                  job={customer.job}
-                />
-              );
-            })}
+            {this.state.customers
+              ? this.state.customers.map(customer => {
+                  return (
+                    <Customer
+                      key={customer.id}
+                      id={customer.id}
+                      image={customer.image}
+                      name={customer.name}
+                      gender={customer.gender}
+                      birthday={customer.birthday}
+                      job={customer.job}
+                    />
+                  );
+                })
+              : ""}
           </TableBody>
         </Table>
       </Paper>
