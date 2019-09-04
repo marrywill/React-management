@@ -18,6 +18,15 @@ class CustomerAdd extends React.Component {
     e.preventDefault();
     this.addCustomer().then(response => {
       console.log(response.data);
+      this.props.stateRefresh(); // 고객 추가한 다음 res를 받고나서 refresh
+    });
+    this.setState({
+      file: null,
+      userName: "",
+      birthday: "",
+      gender: "",
+      job: "",
+      fileName: ""
     });
   };
 
