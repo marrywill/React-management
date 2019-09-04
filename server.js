@@ -24,15 +24,18 @@ const multer = require("multer"); //파일의 처리를 위한 라이브러리
 const upload = multer({ dest: "./upload" }); // 업로드되는 경로 설정
 
 app.get("/api/customers", (req, res) => {
-  connection.query("SELECT * FROM CUSTOMER", (err, rows, fields) => {
-    res.send(rows);
-  });
+  connection.query(
+    "SELECT * FROM CUSTOMER WHERE isDeleted = 0",
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  );
 });
 
 app.use("/image", express.static("./upload"));
 
 app.post("/api/customers", upload.single("image"), (req, res) => {
-  let sql = "INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?)";
+  let sql = "INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?, now(),0)";
   let image = "/image/" + req.file.filename;
   let name = req.body.name;
   let birthday = req.body.birthday;
@@ -43,6 +46,14 @@ app.post("/api/customers", upload.single("image"), (req, res) => {
     res.send(rows);
     console.log(err);
     console.log(rows);
+  });
+});
+
+app.delete("/api/customers/:id", (req, res) => {
+  let sql = "UPDATE CUSTOMER SET isDeleted = 1 WHERE id = ?";
+  let params = [req.params.id];
+  connection.query(sql, params, (err, rows, fields) => {
+    res.send(rows);
   });
 });
 
