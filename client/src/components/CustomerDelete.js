@@ -42,7 +42,7 @@ class CustomerDelete extends React.Component {
           삭제
         </Button>
         <Dialog open={this.state.open} onClose={this.handleClose}>
-          <DialogTitle onClick={this.handleClose}>삭제 경고</DialogTitle>
+          <DialogTitle>삭제 경고</DialogTitle>
           <DialogContent>
             <Typography gutterBottom>
               선택한 고객의 정보가 삭제됩니다.
