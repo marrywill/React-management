@@ -41,7 +41,7 @@ class CustomerAdd extends React.Component {
       gender: "",
       job: "",
       fileName: "",
-      opne: false
+      open: false
     });
   };
 
